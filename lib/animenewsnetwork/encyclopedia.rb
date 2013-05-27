@@ -1,11 +1,18 @@
 require 'open-uri'
 require 'nokogiri'
+require 'addressable/uri'
 
 class AnimeNewsNetwork::Encyclopedia
-  def initialize()
+  def initialize(url: 'http://cdn.animenewsnetwork.com/encyclopedia')
+    @uri = Addressable::URI.parse(url)
   end
 
-  def get_reports(*args)
-    Nokogiri::XML(open("http://cdn.animenewsnetwork.com/encyclopedia/reports.xml?id=155&type=anime"))
+  def get_reports(id: nil, type: nil)
+    @uri.path += '/reports.xml';
+    @uri.query_values = {
+      id:   id,
+      type: type,
+    }
+    Nokogiri::XML(open(@uri))
   end
 end
