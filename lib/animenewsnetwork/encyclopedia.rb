@@ -11,8 +11,10 @@ class AnimeNewsNetwork::Encyclopedia
   def get_reports(args = {})
     validator = DataValidator::Validator.new(
       args, {
-        id:   { presence: true, numericality: { only_integer: true } },
-        type: { presence: true, inclusion: { in: %w(anime manga) } },
+        id:    { presence: true, numericality: { only_integer: true } },
+        type:  { presence: true, inclusion: { in: %w(anime manga) } },
+        nskip: { allow_nil: true, numericality: { only_integer: true } },
+        nlist: { allow_nil: true, format: { with: /^(\d+|all)$/ } },
       }
     )
     raise ArgumentError, validator.errors unless validator.valid?
