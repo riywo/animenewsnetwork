@@ -4,8 +4,8 @@ require 'addressable/uri'
 require 'data_validator'
 
 class AnimeNewsNetwork::Encyclopedia
-  def initialize(url: 'http://cdn.animenewsnetwork.com/encyclopedia')
-    @url = url.freeze
+  def initialize(args = {})
+    @url = args.has_key?(:url) ? args[:url] : 'http://cdn.animenewsnetwork.com/encyclopedia'
   end
 
   def get_reports(args = {})
