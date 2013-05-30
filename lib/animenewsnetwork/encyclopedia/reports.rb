@@ -1,8 +1,6 @@
-require 'data_validator'
-
 class AnimeNewsNetwork::Encyclopedia::Reports
   CONFIG = {
-    list:                 { id: 155, params: [:type, :name, :search] },
+    anime_list:           { id: 155, type: 'anime' },
     anime_series_length:  { id: 177 },
     anime_ratings:        { id: 172 },
     recently_added_anime: { id: 148 },
@@ -15,16 +13,15 @@ class AnimeNewsNetwork::Encyclopedia::Reports
   def anime_series_length(args = {})
     params = args.merge(CONFIG[:anime_series_length])
     xml = @ann.get_reports(params)
-    list = []
-    xml.xpath('//item').each do |item|
+    xml.xpath('//item').map do |item|
+      data = {}
       anime = item.xpath('anime')[0]
-      title  = anime.text
-      id     = anime['href'].match(/id=(\d+)/) { $1.to_i }
-      length = item.xpath('nb_episodes')[0].text.to_i
-      list << {
-        id: id, title: title, length: length
-      }
+      data[:id] = anime['href'].match(/id=(\d+)/) { $1.to_i }
+      data[:title] = anime.text
+      data[:episodes] = item.xpath('nb_episodes')[0].text.to_i
+      data[:start_date], data[:end_date] =
+        item.xpath('production_date')[0].text.match(/([\d\-]+) to ([\d\-]+)/) { [$1, $2] }
+      data
     end
-    list
   end
 end
