@@ -1,30 +1,38 @@
 require 'open-uri'
 require 'nokogiri'
 require 'addressable/uri'
+require 'data_validator'
 
 class AnimeNewsNetwork::Encyclopedia
   def initialize(url: 'http://cdn.animenewsnetwork.com/encyclopedia')
     @url = url.freeze
   end
 
-  def get_reports(id: nil, type: nil)
-    raise ArgumentError if id.nil?
-    raise ArgumentError if type.nil?
+  def get_reports(args = {})
+    validator = DataValidator::Validator.new(
+      args, {
+        id:   { presence: true, numericality: { only_integer: true } },
+        type: { presence: true, inclusion: { in: %w(anime manga) } },
+      }
+    )
+    raise ArgumentError, validator.errors unless validator.valid?
 
     path = '/reports.xml';
-    query = {
-      id:   id,
-      type: type,
-    }
+    query = args
     Nokogiri::XML(get(path, query))
   end
 
-  def get_details(id: nil, type: nil)
-    raise ArgumentError if id.nil?
-    raise ArgumentError if type.nil?
+  def get_details(args = {})
+    validator = DataValidator::Validator.new(
+      args, {
+        id:   { presence: true, numericality: { only_integer: true } },
+        type: { presence: true, inclusion: { in: %w(anime manga) } },
+      }
+    )
+    raise ArgumentError, validator.errors unless validator.valid?
 
     path = '/api.xml';
-    query = { type => id }
+    query = { args[:type] => args[:id] }
     Nokogiri::XML(get(path, query))
   end
 
