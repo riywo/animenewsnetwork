@@ -29,11 +29,13 @@ describe AnimeNewsNetwork::Encyclopedia::Reports do
     subject { reports.anime_series_length() }
     it { should be_a Array }
     its(:first) { should eq Hash[
-      id:         15201,
-      title:      "Otona Joshi no Anime Time (TV 2)",
-      episodes:   3,
-      start_date: "2013-03-10",
-      end_date:   "2013-03-24"
+      id:                   15201,
+      title:                "Otona Joshi no Anime Time (TV 2)",
+      episodes:             3,
+      start_date:           "2013-03-10",
+      end_date:             "2013-03-24",
+      days:                 15,
+      avg_days_between_eps: 7.0,
     ] }
   end
 
@@ -52,10 +54,10 @@ describe AnimeNewsNetwork::Encyclopedia::Reports do
     subject { reports.anime_ratings() }
     it { should be_a Array }
     its(:first) { should eq Hash[
-      id:       11770,
-      title:    "Steins;Gate (TV)",
-      nb_votes: 2733,
-      nb_seen:  3903,
+      id:               11770,
+      title:            "Steins;Gate (TV)",
+      votes:            2733,
+      seen:             3903,
       straight_average: 9.230199813842773,
       weighted_average: 9.122900009155273,
       bayesian_average: 9.116583824157715,

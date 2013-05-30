@@ -21,6 +21,8 @@ class AnimeNewsNetwork::Encyclopedia::Reports
       data[:episodes] = item.xpath('nb_episodes')[0].text.to_i
       data[:start_date], data[:end_date] =
         item.xpath('production_date')[0].text.match(/([\d\-]+) to ([\d\-]+)/) { [$1, $2] }
+      data[:days] = item.xpath('nb_days')[0].text.to_i
+      data[:avg_days_between_eps] = item.xpath('avg_days_between_eps')[0].text.to_f
       data
     end
   end
@@ -46,8 +48,8 @@ class AnimeNewsNetwork::Encyclopedia::Reports
       anime = item.xpath('anime')[0]
       data[:id] = anime['href'].match(/id=(\d+)/) { $1.to_i }
       data[:title] = anime.text
-      data[:nb_votes] = item.xpath('nb_votes')[0].text.to_i
-      data[:nb_seen] = item.xpath('nb_seen')[0].text.to_i
+      data[:votes] = item.xpath('nb_votes')[0].text.to_i
+      data[:seen] = item.xpath('nb_seen')[0].text.to_i
       data[:straight_average] = item.xpath('straight_average')[0].text.to_f
       data[:weighted_average] = item.xpath('weighted_average')[0].text.to_f
       data[:bayesian_average] = item.xpath('bayesian_average')[0].text.to_f
