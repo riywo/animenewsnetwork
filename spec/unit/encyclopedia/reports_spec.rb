@@ -16,6 +16,11 @@ describe AnimeNewsNetwork::Encyclopedia::Reports do
     stub_http_request(:get, "cdn.animenewsnetwork.com/encyclopedia/reports.xml")
       .with(query: { id: 172 })
       .to_return(body: reports_xml)
+
+    reports_xml = File.new(File.expand_path('../../../resources/reports_xml_id_148', __FILE__))
+    stub_http_request(:get, "cdn.animenewsnetwork.com/encyclopedia/reports.xml")
+      .with(query: { id: 148 })
+      .to_return(body: reports_xml)
   end
 
   let(:reports) { AnimeNewsNetwork::Encyclopedia::Reports.new }
@@ -54,6 +59,16 @@ describe AnimeNewsNetwork::Encyclopedia::Reports do
       straight_average: 9.230199813842773,
       weighted_average: 9.122900009155273,
       bayesian_average: 9.116583824157715,
+    ] }
+  end
+
+  describe "anime_added_recently" do
+    subject { reports.anime_added_recently() }
+    it { should be_a Array }
+    its(:first) { should eq Hash[
+      id:         15359,
+      title:      "Arpeggio of Blue Steel (TV)",
+      date_added: "2013-05-29 14:29:49",
     ] }
   end
 end

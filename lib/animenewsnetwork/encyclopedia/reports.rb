@@ -3,7 +3,7 @@ class AnimeNewsNetwork::Encyclopedia::Reports
     anime_list:           { id: 155, type: 'anime' },
     anime_series_length:  { id: 177 },
     anime_ratings:        { id: 172 },
-    recently_added_anime: { id: 148 },
+    anime_added_recently: { id: 148 },
   }
 
   def initialize()
@@ -51,6 +51,19 @@ class AnimeNewsNetwork::Encyclopedia::Reports
       data[:straight_average] = item.xpath('straight_average')[0].text.to_f
       data[:weighted_average] = item.xpath('weighted_average')[0].text.to_f
       data[:bayesian_average] = item.xpath('bayesian_average')[0].text.to_f
+      data
+    end
+  end
+
+  def anime_added_recently(args = {})
+    params = args.merge(CONFIG[:anime_added_recently])
+    xml = @ann.get_reports(params)
+    xml.xpath('//item').map do |item|
+      data = {}
+      anime = item.xpath('anime')[0]
+      data[:id] = anime['href'].match(/id=(\d+)/) { $1.to_i }
+      data[:title] = anime.text
+      data[:date_added] = item.xpath('date_added')[0].text
       data
     end
   end
