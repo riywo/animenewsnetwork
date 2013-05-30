@@ -37,4 +37,21 @@ class AnimeNewsNetwork::Encyclopedia::Reports
       data
     end
   end
+
+  def anime_ratings(args = {})
+    params = args.merge(CONFIG[:anime_ratings])
+    xml = @ann.get_reports(params)
+    xml.xpath('//item').map do |item|
+      data = {}
+      anime = item.xpath('anime')[0]
+      data[:id] = anime['href'].match(/id=(\d+)/) { $1.to_i }
+      data[:title] = anime.text
+      data[:nb_votes] = item.xpath('nb_votes')[0].text.to_i
+      data[:nb_seen] = item.xpath('nb_seen')[0].text.to_i
+      data[:straight_average] = item.xpath('straight_average')[0].text.to_f
+      data[:weighted_average] = item.xpath('weighted_average')[0].text.to_f
+      data[:bayesian_average] = item.xpath('bayesian_average')[0].text.to_f
+      data
+    end
+  end
 end
