@@ -2,6 +2,8 @@
 
 TODO: Write a gem description
 
+[![Build Status](https://travis-ci.org/riywo/animenewsnetwork.png?branch=master)](https://travis-ci.org/riywo/animenewsnetwork)
+
 ## Installation
 
 Add this line to your application's Gemfile:
