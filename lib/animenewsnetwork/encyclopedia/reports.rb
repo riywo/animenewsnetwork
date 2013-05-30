@@ -24,4 +24,17 @@ class AnimeNewsNetwork::Encyclopedia::Reports
       data
     end
   end
+
+  def anime_list(args = {})
+    params = args.merge(CONFIG[:anime_list])
+    xml = @ann.get_reports(params)
+    xml.xpath('//item').map do |item|
+      data = {}
+      data[:id] = item.xpath('id').text.to_i
+      data[:gid] = item.xpath('gid').text.to_i
+      data[:name] = item.xpath('name').text
+      data[:type] = item.xpath('type').text
+      data
+    end
+  end
 end

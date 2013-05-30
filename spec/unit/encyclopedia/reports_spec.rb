@@ -26,4 +26,15 @@ describe AnimeNewsNetwork::Encyclopedia::Reports do
       end_date:   "2013-03-24"
     ] }
   end
+
+  describe "anime_list" do
+    subject { reports.anime_list() }
+    it { should be_a Array }
+    its(:first) { should eq Hash[
+      id:   15347,
+      gid:  1743357399,
+      name: "Outbreak Company",
+      type: "TV",
+    ] }
+  end
 end
